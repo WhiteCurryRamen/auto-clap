@@ -1,0 +1,29 @@
+{
+  "name": "auto-clap",
+  "version": "1.0.0",
+  "description": "TG Auto clap",
+  "main": "index.js",
+  "scripts": {
+    "dev": "dev",
+    "buildprod": "vercel build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hand-owt/auto-clap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hand-owt/auto-clap/issues"
+  },
+  "homepage": "https://github.com/hand-owt/auto-clap#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.64.6",
+    "ngrok": "^5.0.0-beta.2",
+    "prettier": "^3.2.5"
+  }
+}
