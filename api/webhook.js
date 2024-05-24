@@ -1,5 +1,8 @@
+process.env.NTBA_FIX_319 = 'test';
+
 const TelegramBot = require('node-telegram-bot-api');
 const ngrok = require('ngrok');
+const bot = new TelegramBot(process.env.TG_BOT_TOKEN);
 
 module.exports = async (request, response) => {
 	try {
@@ -8,7 +11,7 @@ module.exports = async (request, response) => {
 		// 		subdomain: 'handOwt',
 		// 	});
 		// }
-		const bot = new TelegramBot(process.env.TG_BOT_TOKEN);
+
 		// const { body } = request;
 
 		// if (body.message) {
@@ -24,12 +27,38 @@ module.exports = async (request, response) => {
 		// 	await bot.sendSticker(chat.id, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
 		// }
 
+		const { body } = request;
+		console.log(body.message);
+		console.log('are u running?');
+		console.log(async () => {
+			await bot.getWebHookInfo();
+		});
+		console.log(async () => {
+			await bot.getMe();
+		});
+
 		bot.on('message', async (msg) => {
-			console.log('received', msg);
+			console.log('message');
+			const chatId = msg.chat.id;
+			await bot.sendMessage(chatId, 'from message');
 		});
 
 		bot.on('text', async (msg) => {
-			console.log('text_received', msg.chat.title);
+			console.log('text');
+			const chatId = msg.chat.id;
+			await bot.sendMessage(chatId, 'from text');
+		});
+
+		bot.on('polling_error', (error) => {
+			console.log('polling_error:', error);
+		});
+
+		bot.on('polling', () => {
+			console.log('polling...');
+		});
+
+		bot.on('webhook_error', (error) => {
+			console.log('webhook_error:', error.code);
 		});
 
 		// bot.on('message', (msg) => {
@@ -49,4 +78,5 @@ module.exports = async (request, response) => {
 		console.log(error.toString());
 	}
 	response.send('OK');
+	response.end();
 };
