@@ -4,8 +4,10 @@
   "description": "TG Auto clap",
   "main": "index.js",
   "scripts": {
-    "dev": "dev",
-    "buildprod": "vercel build",
+    "vercelinit": "vercel",
+    "verceldev": "vercel dev",
+    "vercelbuild": "vercel build",
+    "verceldeploy": "vercel --prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
