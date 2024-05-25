@@ -30,36 +30,23 @@ module.exports = async (request, response) => {
 		const { body } = request;
 		console.log(body.message);
 		console.log('are u running?');
-		console.log(async () => {
-			await bot.getWebHookInfo();
-		});
-		console.log(async () => {
-			await bot.getMe();
-		});
 
-		bot.on('message', async (msg) => {
-			console.log('message');
-			const chatId = msg.chat.id;
-			await bot.sendMessage(chatId, 'from message');
-		});
+		const message = body.message;
+		const messageType = fetchMessageType(message);
 
-		bot.on('text', async (msg) => {
-			console.log('text');
-			const chatId = msg.chat.id;
-			await bot.sendMessage(chatId, 'from text');
-		});
+		console.log(messageType);
 
-		bot.on('polling_error', (error) => {
-			console.log('polling_error:', error);
-		});
-
-		bot.on('polling', () => {
-			console.log('polling...');
-		});
-
-		bot.on('webhook_error', (error) => {
-			console.log('webhook_error:', error.code);
-		});
+		// auto slap
+		if (messageType.message_type == 'sticker') {
+			const messageMetadata = messageType.metadata;
+			const messageTarget = messageType.target;
+			const setName = messageMetadata.set_name;
+			const emoji = messageMetadata.emoji;
+			if (setName == 'Suicas' && emoji == '👋') {
+				// await bot.sendMessage(messageTarget.chat_id, messageTarget.user_id);
+				await bot.sendSticker(messageTarget.chat_id, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
+			}
+		}
 
 		// bot.on('message', (msg) => {
 		// 	const chatId = msg.chat.id;
