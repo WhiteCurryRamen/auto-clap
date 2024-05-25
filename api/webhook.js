@@ -80,3 +80,40 @@ module.exports = async (request, response) => {
 	response.send('OK');
 	response.end();
 };
+
+const fetchMessageType = (messageObj) => {
+	// command
+	if (!!messageObj.entities) {
+		const firstEntity = messageObj.entities[0];
+		if (firstEntity.type == 'bot_command') {
+			const messageSplit = messageObj.text.split(' ');
+			return {
+				message_type: 'command',
+				metadata: {
+					command: messageSplit[0],
+					content: messageSplit.shift().join(' '),
+				},
+			};
+		}
+	}
+
+	// sticker
+	if (!!messageObj.sticker) {
+		const stickerObj = messageObj.sticker;
+		return {
+			message_type: 'sticker',
+			metadata: {
+				set_name: stickerObj.set_name,
+				emoji: stickerObj.emoji,
+			},
+		};
+	}
+
+	// text
+	return {
+		message_type: 'text',
+		metadata: {
+			content: messageObj.text,
+		},
+	};
+};
