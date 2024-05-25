@@ -3,13 +3,24 @@ process.env.NTBA_FIX_319 = 'test';
 const TelegramBot = require('node-telegram-bot-api');
 const ngrok = require('ngrok');
 const bot = new TelegramBot(process.env.TG_BOT_TOKEN);
+const fetch = require('node-fetch');
 
 module.exports = async (request, response) => {
 	try {
 		// if (process.env.NODE_ENV == 'development') {
-		// 	const url = await ngrok.connect({
-		// 		subdomain: 'handOwt',
-		// 	});
+		// 	fetch('http://localhost:4040/api/tunnels')
+		// 		.then((res) => res.json())
+		// 		.then((json) => json.tunnels.find((tunnel) => tunnel.proto === 'https'))
+		// 		.then((secureTunnel) => {
+		// 			console.log('?');
+		// 			console.log(secureTunnel.public_url);
+		// 		})
+		// 		.catch((err) => {
+		// 			if (err.code === 'ECONNREFUSED') {
+		// 				return console.error("Looks like you're not running ngrok.");
+		// 			}
+		// 			console.error(err);
+		// 		});
 		// }
 
 		// const { body } = request;
