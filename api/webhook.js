@@ -82,6 +82,8 @@ module.exports = async (request, response) => {
 };
 
 const fetchMessageType = (messageObj) => {
+	const targetChat = messageObj.chat.id;
+
 	// command
 	if (!!messageObj.entities) {
 		const firstEntity = messageObj.entities[0];
@@ -93,6 +95,7 @@ const fetchMessageType = (messageObj) => {
 					command: messageSplit[0],
 					content: messageSplit.shift().join(' '),
 				},
+				target_chat: targetChat,
 			};
 		}
 	}
@@ -106,6 +109,7 @@ const fetchMessageType = (messageObj) => {
 				set_name: stickerObj.set_name,
 				emoji: stickerObj.emoji,
 			},
+			target_chat: targetChat,
 		};
 	}
 
@@ -115,5 +119,6 @@ const fetchMessageType = (messageObj) => {
 		metadata: {
 			content: messageObj.text,
 		},
+		target_chat: targetChat,
 	};
 };
