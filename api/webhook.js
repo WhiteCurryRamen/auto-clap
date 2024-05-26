@@ -42,20 +42,18 @@ module.exports = async (request, response) => {
 		console.log(body.message);
 		console.log('are u running?');
 
-		const message = body.message;
-		const messageType = fetchMessageType(message);
+		const message = processMessage(body.message);
 
 		console.log(messageType);
+		const messageType = message.message_type;
+		const metadataValue = message.metadata.value;
+		const metadataParam = message.metadata.param ?? [];
+		const targetChat = message.target_chat;
 
 		// auto slap
-		if (messageType.message_type == 'sticker') {
-			const messageMetadata = messageType.metadata;
-			const messageTarget = messageType.target;
-			const setName = messageMetadata.set_name;
-			const emoji = messageMetadata.emoji;
-			if (setName == 'Suicas' && emoji == '👋') {
-				// await bot.sendMessage(messageTarget.chat_id, messageTarget.user_id);
-				await bot.sendSticker(messageTarget.chat_id, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
+		if (messageType == 'sticker') {
+			if (metadataParam.includes('Suicas') && metadataValue == '👋') {
+				await bot.sendSticker(targetChat, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
 			}
 		}
 
@@ -79,7 +77,7 @@ module.exports = async (request, response) => {
 	response.end();
 };
 
-const fetchMessageType = (messageObj) => {
+const processMessage = (messageObj) => {
 	const targetChat = messageObj.chat.id;
 
 	// command
@@ -90,8 +88,8 @@ const fetchMessageType = (messageObj) => {
 			return {
 				message_type: 'command',
 				metadata: {
-					command: messageSplit[0],
-					content: messageSplit.shift().join(' '),
+					value: messageSplit[0],
+					param: messageSplit.shift(),
 				},
 				target_chat: targetChat,
 			};
@@ -104,8 +102,8 @@ const fetchMessageType = (messageObj) => {
 		return {
 			message_type: 'sticker',
 			metadata: {
-				set_name: stickerObj.set_name,
-				emoji: stickerObj.emoji,
+				value: stickerObj.emoji,
+				param: [stickerObj.set_name],
 			},
 			target_chat: targetChat,
 		};
@@ -115,7 +113,7 @@ const fetchMessageType = (messageObj) => {
 	return {
 		message_type: 'text',
 		metadata: {
-			content: messageObj.text,
+			value: messageObj.text,
 		},
 		target_chat: targetChat,
 	};
