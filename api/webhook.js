@@ -7,54 +7,29 @@ const fetch = require('node-fetch');
 
 module.exports = async (request, response) => {
 	try {
-		// if (process.env.NODE_ENV == 'development') {
-		// 	fetch('http://localhost:4040/api/tunnels')
-		// 		.then((res) => res.json())
-		// 		.then((json) => json.tunnels.find((tunnel) => tunnel.proto === 'https'))
-		// 		.then((secureTunnel) => {
-		// 			console.log('?');
-		// 			console.log(secureTunnel.public_url);
-		// 		})
-		// 		.catch((err) => {
-		// 			if (err.code === 'ECONNREFUSED') {
-		// 				return console.error("Looks like you're not running ngrok.");
-		// 			}
-		// 			console.error(err);
-		// 		});
-		// }
-
-		// const { body } = request;
-
-		// if (body.message) {
-		// 	const { chat, from, text } = body.message;
-
-		// 	const chatId = chat.id;
-		// 	const userId = from.username;
-
-		// 	console.log('running inside');
-		// 	console.log(body.message);
-
-		// 	await bot.sendMessage(chatId, userId);
-		// 	await bot.sendSticker(chat.id, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
-		// }
-
 		const { body } = request;
-		console.log(body.message);
-		console.log('are u running?');
-
 		const message = processMessage(body.message);
-
-		console.log(messageType);
 		const messageType = message.message_type;
 		const metadataValue = message.metadata.value;
 		const metadataParam = message.metadata.param ?? [];
 		const targetChat = message.target_chat;
 
-		// auto slap
 		if (messageType == 'sticker') {
 			if (metadataParam.includes('Suicas') && metadataValue == '👋') {
 				await bot.sendSticker(targetChat, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
 			}
+			if (metadataParam.includes('Suicas') && metadataValue == '🥊') {
+				await bot.sendSticker(targetChat, 'CAACAgUAAxkBAAErW6tmQMWstAXdilw4vUFIAU1-9bL2SAACSQADvXbGBW5aks8Pe2fzNQQ');
+			}
+		}
+
+		if (messageType == 'command') {
+			if (metadataValue == 'trash') {
+				await bot.sendMessage(id, '||How do you turn this on?||', { parse_mode: 'Markdown' });
+			}
+		}
+
+		if (messageType == 'text') {
 		}
 
 		// bot.on('message', (msg) => {
