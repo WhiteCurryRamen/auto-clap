@@ -4,6 +4,8 @@ const TelegramBot = require('node-telegram-bot-api');
 const ngrok = require('ngrok');
 const bot = new TelegramBot(process.env.TG_BOT_TOKEN);
 const fetch = require('node-fetch');
+const handleSticker = require('./handleSticker');
+const handleCommand = require('./handleCommand');
 
 module.exports = async (request, response) => {
 	try {
@@ -15,18 +17,11 @@ module.exports = async (request, response) => {
 		const targetChat = message.target_chat;
 
 		if (messageType == 'sticker') {
-			if (metadataParam.includes('Suicas') && metadataValue == '👋') {
-				await bot.sendSticker(targetChat, 'CAACAgUAAxkBAAErWjZmQGJ2b_h7Fw90Kl5ZlctqHj1kqAACPgADvXbGBZkkgZg6z6UTNQQ');
-			}
-			if (metadataParam.includes('Suicas') && metadataValue == '🥊') {
-				await bot.sendSticker(targetChat, 'CAACAgUAAxkBAAErW6tmQMWstAXdilw4vUFIAU1-9bL2SAACSQADvXbGBW5aks8Pe2fzNQQ');
-			}
+			const sent = await handleSticker(bot, message);
 		}
 
 		if (messageType == 'command') {
-			if (metadataValue == 'trash') {
-				await bot.sendMessage(id, '||How do you turn this on?||', { parse_mode: 'Markdown' });
-			}
+			const sent = await handleCommand(bot, message);
 		}
 
 		if (messageType == 'text') {
@@ -48,6 +43,7 @@ module.exports = async (request, response) => {
 		console.error('Error sending message');
 		console.log(error.toString());
 	}
+
 	response.send('OK');
 	response.end();
 };
@@ -63,8 +59,8 @@ const processMessage = (messageObj) => {
 			return {
 				message_type: 'command',
 				metadata: {
-					value: messageSplit[0],
-					param: messageSplit.shift(),
+					value: messageSplit[0].replace('/', ''),
+					param: messageSplit.length > 1 ? messageSplit.shift() : [],
 				},
 				target_chat: targetChat,
 			};

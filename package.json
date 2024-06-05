@@ -8,9 +8,9 @@
     "verceldev": "vercel dev",
     "vercelbuild": "vercel build",
     "verceldeploy": "vercel --prod",
-    "startngrok":"ngrok http 3000",
+    "startngrok": "ngrok http 3000",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"concurrently \"npm run verceldev\" \"npm run startngrok\""
+    "dev": "concurrently \"npm run verceldev\" \"npm run startngrok\""
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/hand-owt/auto-clap#readme",
   "dependencies": {
+    "google-auth-library": "^9.10.0",
+    "google-spreadsheet": "^4.1.2",
     "node-telegram-bot-api": "^0.66.0",
     "vercel": "^34.2.2"
   },
