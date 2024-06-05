@@ -1,4 +1,5 @@
 process.env.NTBA_FIX_319 = 'test';
+process.env['NTBA_FIX_350'] = 1;
 
 const TelegramBot = require('node-telegram-bot-api');
 const ngrok = require('ngrok');

@@ -22,8 +22,8 @@ const handleSticker = async (bot, message) => {
 		await asyncTimeout(5000);
 		const removeSticker = await bot.deleteMessage(sentStickerChatId, sentStickerMessageId);
 
-		//10sec cd
-		await asyncTimeout(10000);
+		//3sec cd
+		await asyncTimeout(3000);
 	}
 };
 
